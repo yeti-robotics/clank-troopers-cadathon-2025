@@ -11,7 +11,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 // GNU General Public License for more details.
 
-package frc.robot;
+package frc.robot.constants;
 
 import edu.wpi.first.wpilibj.RobotBase;
 
@@ -22,6 +22,8 @@ import edu.wpi.first.wpilibj.RobotBase;
 public final class Constants {
     public static final Mode simMode = Mode.SIM;
     public static final Mode currentMode = RobotBase.isReal() ? Mode.REAL : simMode;
+
+    public static final double FIELD_LENGTH = 0;
 
     public static enum Mode {
         /** Running on a real robot. */
