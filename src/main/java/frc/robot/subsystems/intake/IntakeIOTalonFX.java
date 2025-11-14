@@ -9,7 +9,7 @@ public class IntakeIOTalonFX implements IntakeIO {
 
     public IntakeIOTalonFX() {
         intakeMotor = new TalonFX(IntakeConfig.intakeMotorID);
-        PhysicsSim.getInstance().addTalonFX(intakeMotor);
+
     }
 
     public void updateInputs(IntakeIOInputs inputs) {
