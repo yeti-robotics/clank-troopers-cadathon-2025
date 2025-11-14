@@ -1,4 +1,23 @@
 package frc.robot.subsystems.intake;
 
-public class IntakeIOTalonFX implements IntakeIO{
+import com.ctre.phoenix6.hardware.CANrange;
+import com.ctre.phoenix6.hardware.TalonFX;
+import frc.robot.util.sim.PhysicsSim;
+
+public class IntakeIOTalonFX implements IntakeIO {
+    private TalonFX intakeMotor;
+
+    public IntakeIOTalonFX() {
+        intakeMotor = new TalonFX(IntakeConfig.intakeMotorID);
+        PhysicsSim.getInstance().addTalonFX(intakeMotor);
+    }
+
+    public void updateInputs(IntakeIOInputs inputs) {
+        inputs.rollerVelocity = intakeMotor.getVelocity().getValueAsDouble();
+    }
+
+    @Override
+    public void setPower(double scorePower) {
+        intakeMotor.set(scorePower);
+    }
 }
