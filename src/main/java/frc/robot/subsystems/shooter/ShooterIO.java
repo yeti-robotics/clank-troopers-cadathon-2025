@@ -1,8 +1,10 @@
 package frc.robot.subsystems.shooter;
 
 import frc.robot.subsystems.intake.IntakeIO;
+import org.littletonrobotics.junction.AutoLog;
 
 public interface ShooterIO {
+    @AutoLog
     public class ShooterIOInputs {
         public double feedSpeed = 0.0;
         public double flywheelSpeed = 0.0;
