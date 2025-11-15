@@ -1,8 +1,6 @@
 package frc.robot.subsystems.intake;
 
-import com.ctre.phoenix6.hardware.CANrange;
 import com.ctre.phoenix6.hardware.TalonFX;
-import frc.robot.util.sim.PhysicsSim;
 
 public class IntakeIOTalonFX implements IntakeIO {
     private TalonFX intakeMotor;
