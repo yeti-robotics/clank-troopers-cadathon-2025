@@ -1,6 +1,5 @@
 package frc.robot.subsystems.shooter;
 
-import frc.robot.subsystems.intake.IntakeIO;
 import org.littletonrobotics.junction.AutoLog;
 
 public interface ShooterIO {
@@ -13,7 +12,6 @@ public interface ShooterIO {
     public default void updateInputs(ShooterIO.ShooterIOInputs inputs) {}
 
     public default void setFeedSpeed(double feedSpeed) {}
+
     public default void setFlywheels(double flySpeed) {}
-
-
 }

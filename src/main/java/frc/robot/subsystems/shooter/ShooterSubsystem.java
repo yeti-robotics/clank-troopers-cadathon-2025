@@ -1,10 +1,11 @@
 package frc.robot.subsystems.shooter;
 
-import edu.wpi.first.wpilibj2.command.Command;
-
 import static edu.wpi.first.wpilibj2.command.Commands.runEnd;
 
-public class ShooterSubsystem {
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
+public class ShooterSubsystem extends SubsystemBase {
 
     private ShooterIO io;
     private ShooterIOInputsAutoLogged inputs = new ShooterIOInputsAutoLogged();
@@ -22,7 +23,11 @@ public class ShooterSubsystem {
         return runEnd(() -> io.setFeedSpeed(feedSpeed), () -> io.setFeedSpeed(0));
     }
 
-    public Command runFlywheels(double speed) {
-        return runEnd(() -> io.setFlywheels(speed), () -> io.setFlywheels(0));
+    public Command startFlywheels(double speed) {
+        return run(() -> io.setFlywheels(speed));
+    }
+
+    public Command stopFlywheels() {
+        return run(() -> io.setFlywheels(0));
     }
 }
