@@ -2,6 +2,7 @@ package frc.robot.commands;
 
 import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import frc.robot.subsystems.arm.ArmSubsystem;
 import frc.robot.subsystems.hood.HoodSubsystem;
 import frc.robot.subsystems.intake.IntakeSubsystem;
 import frc.robot.subsystems.shooter.ShooterSubsystem;
@@ -9,12 +10,12 @@ import frc.robot.subsystems.shooter.ShooterSubsystem;
 public class AutoNamedCommands {
     private final IntakeSubsystem intake;
     private final ShooterSubsystem shooter;
-    private final HoodSubsystem hood;
+    private final ArmSubsystem arm;
 
-    public AutoNamedCommands(IntakeSubsystem intake, HoodSubsystem hood, ShooterSubsystem shooter) {
+    public AutoNamedCommands(IntakeSubsystem intake, ArmSubsystem arm, ShooterSubsystem shooter) {
         this.intake = intake;
         this.shooter = shooter;
-        this.hood = hood;
+        this.arm = arm;
         registerCommands();
     }
 
@@ -26,7 +27,7 @@ public class AutoNamedCommands {
                                 .andThen(shooter.startFeeders(0.3).withTimeout(2))
                                 .andThen(shooter.stopFlywheels())));
 
-        // NamedCommands.registerCommands("deploy intake");
-        // NamedCommands.registerCommands("stow intake");
+        //NamedCommands.registerCommands("deploy intake", arm.moveToPosition(0));
+        //NamedCommands.registerCommands("stow intake", arm.moveToPosition(0.75));
     }
 }

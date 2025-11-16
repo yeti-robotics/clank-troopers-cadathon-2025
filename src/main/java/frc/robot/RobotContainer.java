@@ -32,6 +32,7 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.DriveCommands;
 import frc.robot.constants.Constants;
 import frc.robot.generated.TunerConstants;
+import frc.robot.subsystems.arm.*;
 import frc.robot.subsystems.drive.*;
 import frc.robot.subsystems.hood.HoodIO;
 import frc.robot.subsystems.hood.HoodIOSim;
@@ -69,6 +70,7 @@ public class RobotContainer {
     private final HoodSubsystem hood;
     private final ShooterSubsystem shooter;
     private final SpindexerSubsystem spindexer;
+    private final ArmSubsystem arm;
 
     private SwerveDriveSimulation driveSimulation = null;
 
@@ -98,6 +100,7 @@ public class RobotContainer {
                 hood = new HoodSubsystem(new HoodIOTalonFX());
                 shooter = new ShooterSubsystem(new ShooterIOTalonFX());
                 spindexer = new SpindexerSubsystem(new SpindexerIOTalonFX());
+                arm = new ArmSubsystem(new ArmIOTalonFX());
                 break;
             case SIM:
                 // Sim robot, instantiate physics sim IO implementations
@@ -125,6 +128,7 @@ public class RobotContainer {
                 hood = new HoodSubsystem(new HoodIOSim());
                 shooter = new ShooterSubsystem(new ShooterIOSim());
                 spindexer = new SpindexerSubsystem(new SpindexerIOSim());
+                arm = new ArmSubsystem(new ArmIOSim());
 
                 break;
 
@@ -142,6 +146,7 @@ public class RobotContainer {
                 hood = new HoodSubsystem(new HoodIO() {});
                 shooter = new ShooterSubsystem(new ShooterIO() {});
                 spindexer = new SpindexerSubsystem(new SpindexerIO() {});
+                arm = new ArmSubsystem(new ArmIO() {});
 
                 break;
         }
@@ -190,8 +195,10 @@ public class RobotContainer {
                 : () -> drive.setPose(new Pose2d(drive.getPose().getTranslation(), new Rotation2d())); // zero gyro
         controller.start().onTrue(Commands.runOnce(resetGyro, drive).ignoringDisable(true));
 
-        controller.leftBumper().onTrue(intake.rollIn(0.5).alongWith(spindexer.spin(0.4)));
-        controller.rightBumper().onTrue(intake.rollIn(0).alongWith(spindexer.spin(0.1)));
+        controller.leftBumper().onTrue(arm.moveToPosition(0).andThen(
+                intake.rollIn(0.5).alongWith(spindexer.spin(0.4))));
+        controller.rightBumper().onTrue(arm.moveToPosition(0.75).andThen(
+                intake.rollIn(0).alongWith(spindexer.spin(0.1))));
 
         // should it be getLeftTriggerAxis for the flywheel speed? we want to
         // maintain a constant flywheel speed so for now NO
