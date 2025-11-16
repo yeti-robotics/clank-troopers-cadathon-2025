@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class ArmSubsystem extends SubsystemBase {
 
     private ArmIO io;
-    private ArmIOInputsAutoLogged inputs = new HoodIOInputsAutoLogged();
+    private ArmIOInputsAutoLogged inputs = new ArmIOInputsAutoLogged();
 
     @Override
     public void periodic() {
@@ -17,7 +17,7 @@ public class ArmSubsystem extends SubsystemBase {
         this.io = io;
     }
 
-    public Command moveToPosition(ArmPosition position) {
+    public Command moveToPosition(double position) {
         return run(() -> io.moveToPosition(position));
     }
 }
