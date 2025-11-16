@@ -26,12 +26,29 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.DriveCommands;
 import frc.robot.constants.Constants;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.drive.*;
+import frc.robot.subsystems.hood.HoodIO;
+import frc.robot.subsystems.hood.HoodIOSim;
+import frc.robot.subsystems.hood.HoodIOTalonFX;
+import frc.robot.subsystems.hood.HoodSubsystem;
+import frc.robot.subsystems.intake.IntakeIO;
+import frc.robot.subsystems.intake.IntakeIOSim;
+import frc.robot.subsystems.intake.IntakeIOTalonFX;
+import frc.robot.subsystems.intake.IntakeSubsystem;
+import frc.robot.subsystems.shooter.ShooterIO;
+import frc.robot.subsystems.shooter.ShooterIOSim;
+import frc.robot.subsystems.shooter.ShooterIOTalonFX;
+import frc.robot.subsystems.shooter.ShooterSubsystem;
+import frc.robot.subsystems.spindexer.SpindexerIO;
+import frc.robot.subsystems.spindexer.SpindexerIOSim;
+import frc.robot.subsystems.spindexer.SpindexerIOTalonFX;
+import frc.robot.subsystems.spindexer.SpindexerSubsystem;
 import frc.robot.subsystems.vision.*;
 import org.ironmaple.simulation.SimulatedArena;
 import org.ironmaple.simulation.drivesims.SwerveDriveSimulation;
@@ -48,6 +65,10 @@ public class RobotContainer {
     // Subsystems
     private final Drive drive;
     private final Vision vision;
+    private final IntakeSubsystem intake;
+    private final HoodSubsystem hood;
+    private final ShooterSubsystem shooter;
+    private final SpindexerSubsystem spindexer;
 
     private SwerveDriveSimulation driveSimulation = null;
 
@@ -73,7 +94,10 @@ public class RobotContainer {
                         drive,
                         new VisionIOLimelight(VisionConstants.camera0Name, drive::getRotation),
                         new VisionIOLimelight(VisionConstants.camera1Name, drive::getRotation));
-
+                intake = new IntakeSubsystem(new IntakeIOTalonFX());
+                hood = new HoodSubsystem(new HoodIOTalonFX());
+                shooter = new ShooterSubsystem(new ShooterIOTalonFX());
+                spindexer = new SpindexerSubsystem(new SpindexerIOTalonFX());
                 break;
             case SIM:
                 // Sim robot, instantiate physics sim IO implementations
@@ -97,6 +121,10 @@ public class RobotContainer {
                                 camera0Name, robotToCamera0, driveSimulation::getSimulatedDriveTrainPose),
                         new VisionIOPhotonVisionSim(
                                 camera1Name, robotToCamera1, driveSimulation::getSimulatedDriveTrainPose));
+                intake = new IntakeSubsystem(new IntakeIOSim());
+                hood = new HoodSubsystem(new HoodIOSim());
+                shooter = new ShooterSubsystem(new ShooterIOSim());
+                spindexer = new SpindexerSubsystem(new SpindexerIOSim());
 
                 break;
 
@@ -110,6 +138,10 @@ public class RobotContainer {
                         new ModuleIO() {},
                         (pose) -> {});
                 vision = new Vision(drive, new VisionIO() {}, new VisionIO() {});
+                intake = new IntakeSubsystem(new IntakeIO() {});
+                hood = new HoodSubsystem(new HoodIO() {});
+                shooter = new ShooterSubsystem(new ShooterIO() {});
+                spindexer = new SpindexerSubsystem(new SpindexerIO() {});
 
                 break;
         }
@@ -157,6 +189,18 @@ public class RobotContainer {
                 // simulation
                 : () -> drive.setPose(new Pose2d(drive.getPose().getTranslation(), new Rotation2d())); // zero gyro
         controller.start().onTrue(Commands.runOnce(resetGyro, drive).ignoringDisable(true));
+
+        controller.leftBumper().onTrue(intake.rollIn(0.5).alongWith(spindexer.spin(0.4)));
+        controller.rightBumper().onTrue(intake.rollIn(0).alongWith(spindexer.spin(0.1)));
+
+        // should it be getLeftTriggerAxis for the flywheel speed? we want to
+        // maintain a constant flywheel speed so for now NO
+        controller.leftTrigger().onTrue(shooter.startFlywheels(0.5));
+        controller
+                .rightTrigger()
+                .onTrue(shooter.startFeeders(0.5)
+                        .alongWith(spindexer.spin(0.7))
+                        .andThen(new WaitCommand(3).andThen(shooter.stopFlywheels())));
 
         // Example Coral Placement Code
         // TODO: delete these code for your own project
