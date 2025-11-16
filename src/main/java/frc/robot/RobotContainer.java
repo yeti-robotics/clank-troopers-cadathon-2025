@@ -45,6 +45,10 @@ import frc.robot.subsystems.shooter.ShooterIO;
 import frc.robot.subsystems.shooter.ShooterIOSim;
 import frc.robot.subsystems.shooter.ShooterIOTalonFX;
 import frc.robot.subsystems.shooter.ShooterSubsystem;
+import frc.robot.subsystems.spindexer.SpindexerIO;
+import frc.robot.subsystems.spindexer.SpindexerIOSim;
+import frc.robot.subsystems.spindexer.SpindexerIOTalonFX;
+import frc.robot.subsystems.spindexer.SpindexerSubsystem;
 import frc.robot.subsystems.vision.*;
 import org.ironmaple.simulation.SimulatedArena;
 import org.ironmaple.simulation.drivesims.SwerveDriveSimulation;
@@ -64,7 +68,7 @@ public class RobotContainer {
     private final IntakeSubsystem intake;
     private final HoodSubsystem hood;
     private final ShooterSubsystem shooter;
-
+    private final SpindexerSubsystem spindexer;
 
     private SwerveDriveSimulation driveSimulation = null;
 
@@ -93,7 +97,7 @@ public class RobotContainer {
                 intake = new IntakeSubsystem(new IntakeIOTalonFX());
                 hood = new HoodSubsystem(new HoodIOTalonFX());
                 shooter = new ShooterSubsystem(new ShooterIOTalonFX());
-
+                spindexer = new SpindexerSubsystem(new SpindexerIOTalonFX());
                 break;
             case SIM:
                 // Sim robot, instantiate physics sim IO implementations
@@ -120,6 +124,7 @@ public class RobotContainer {
                 intake = new IntakeSubsystem(new IntakeIOSim());
                 hood = new HoodSubsystem(new HoodIOSim());
                 shooter = new ShooterSubsystem(new ShooterIOSim());
+                spindexer = new SpindexerSubsystem(new SpindexerIOSim());
 
                 break;
 
@@ -136,6 +141,7 @@ public class RobotContainer {
                 intake = new IntakeSubsystem(new IntakeIO() {});
                 hood = new HoodSubsystem(new HoodIO() {});
                 shooter = new ShooterSubsystem(new ShooterIO() {});
+                spindexer = new SpindexerSubsystem(new SpindexerIO() {});
 
                 break;
         }
@@ -184,17 +190,17 @@ public class RobotContainer {
                 : () -> drive.setPose(new Pose2d(drive.getPose().getTranslation(), new Rotation2d())); // zero gyro
         controller.start().onTrue(Commands.runOnce(resetGyro, drive).ignoringDisable(true));
 
-        controller.leftBumper().onTrue(intake.rollIn(0.5));
-        controller.rightBumper().onTrue(intake.rollIn(0));
+        controller.leftBumper().onTrue(intake.rollIn(0.5).alongWith(spindexer.spin(0.4)));
+        controller.rightBumper().onTrue(intake.rollIn(0).alongWith(spindexer.spin(0.1)));
 
         // should it be getLeftTriggerAxis for the flywheel speed? we want to
         // maintain a constant flywheel speed so for now NO
         controller.leftTrigger().onTrue(shooter.startFlywheels(0.5));
-        controller.rightTrigger().onTrue(shooter.startFeeders(0.5).andThen(
-                new WaitCommand(3).andThen(
-                        shooter.stopFlywheels())));
-
-
+        controller
+                .rightTrigger()
+                .onTrue(shooter.startFeeders(0.5)
+                        .alongWith(spindexer.spin(0.7))
+                        .andThen(new WaitCommand(3).andThen(shooter.stopFlywheels())));
 
         // Example Coral Placement Code
         // TODO: delete these code for your own project
