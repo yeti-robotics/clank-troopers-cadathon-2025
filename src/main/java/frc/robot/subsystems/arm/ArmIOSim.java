@@ -3,7 +3,7 @@ package frc.robot.subsystems.arm;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.MotionMagicTorqueCurrentFOC;
 import com.ctre.phoenix6.hardware.TalonFX;
-import frc.robot.subsystems.hood.HoodConfig;
+
 import frc.robot.util.sim.PhysicsSim;
 
 public class ArmIOSim implements ArmIO {
@@ -15,22 +15,23 @@ public class ArmIOSim implements ArmIO {
     public ArmIOSim() {
         armMotorMain = new TalonFX(ArmConfig.MAIN_ARM_MOTOR_ID);
         armMotorFollow = new TalonFX(ArmConfig.FOLLOW_ARM_MOTOR_ID);
+
+        armMotorFollow.setControl(new Follower(ArmConfig.MAIN_ARM_MOTOR_ID, true));
+
         PhysicsSim.getInstance().addTalonFX(armMotorMain);
         PhysicsSim.getInstance().addTalonFX(armMotorFollow);
     }
 
     @Override
     public void updateInputs(ArmIOInputs inputs) {
-        inputs.positionDegCurrentMain = armMotorMain.getPosition().getValueAsDouble();
-        inputs.positionDegTargetMain = armMotorMain.getClosedLoopReference().getValueAsDouble();
-        inputs.positionDegCurrentFollow = armMotorFollow.getPosition().getValueAsDouble();
-        inputs.positionDegTargetFollow = armMotorFollow.getClosedLoopReference().getValueAsDouble();
+        inputs.positionDegCurrent = armMotorMain.getPosition().getValueAsDouble();
+        inputs.positionDegTarget = armMotorMain.getClosedLoopReference().getValueAsDouble();
+
     }
 
     @Override
     public void moveToPosition(double position) {
         armMotorMain.setControl(magicRequest.withPosition(position));
-        armMotorFollow.setControl(new Follower(ArmConfig.MAIN_ARM_MOTOR_ID, true));
     }
 
 
