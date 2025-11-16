@@ -7,6 +7,7 @@ public interface ArmIO {
     public class ArmIOInputs {
         public double positionDegCurrent = 0.0;
         public double positionDegTarget = 0.0;
+
         public double velocityDegPerSec = 0.0;
         public double appliedVolts = 0.0;
         public double currentAmps = 0.0;

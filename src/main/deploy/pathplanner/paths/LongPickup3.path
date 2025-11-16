@@ -8,34 +8,46 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.767272727272728,
-        "y": 5.738181818181818
+        "x": 6.494545454545455,
+        "y": 5.323636363636364
       },
       "isLocked": false,
       "linkedName": "LongShoot"
     },
     {
       "anchor": {
-        "x": 8.425454545454546,
-        "y": 5.86909090909091
+        "x": 8.174545454545456,
+        "y": 6.2290909090909095
       },
       "prevControl": {
-        "x": 8.031474878423198,
-        "y": 5.7420006939195085
+        "x": 7.945506120819909,
+        "y": 6.128886200585985
+      },
+      "nextControl": {
+        "x": 8.403584788271004,
+        "y": 6.329295617595835
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 8.752727272727272,
+        "y": 5.716363636363637
+      },
+      "prevControl": {
+        "x": 8.65424744808248,
+        "y": 5.946149893868151
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Mid3Pick"
     }
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 1,
-      "rotationDegrees": -131.59276568927064
-    },
-    {
-      "waypointRelativePos": 1.5,
-      "rotationDegrees": -53.242909498359
+      "waypointRelativePos": 1.0143266475644763,
+      "rotationDegrees": -163.2392848853243
     }
   ],
   "constraintZones": [],
@@ -51,7 +63,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -161.56505117707786
+    "rotation": 115.06746343806037
   },
   "reversed": false,
   "folder": null,

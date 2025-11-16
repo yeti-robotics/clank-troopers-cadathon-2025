@@ -15,6 +15,30 @@
           "data": {
             "pathName": "PostThieveryShoot"
           }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 3.0
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "LongPickup3"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "PickupTop2"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "ShootSide2"
+          }
         }
       ]
     }
