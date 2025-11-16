@@ -7,11 +7,12 @@ public enum ArmPosition {
     DOWN(0.0),
     STOWED(0.75);
 
-    private Angle height;
-    ArmPosition(double height) {
-        this.height = Units.Rotations.of(height);
+    private Angle position;
+    ArmPosition(double position) {
+        this.position = Units.Rotations.of(position);
+    }
 
-    public Angle get_height() {
-        return height;
-        }
+    public Angle getPosition() {
+        return position;
+    }
 }
