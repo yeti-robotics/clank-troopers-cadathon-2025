@@ -3,7 +3,6 @@ package frc.robot.subsystems.arm;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.MotionMagicTorqueCurrentFOC;
 import com.ctre.phoenix6.hardware.TalonFX;
-import frc.robot.subsystems.hood.HoodConfig;
 import frc.robot.util.sim.PhysicsSim;
 
 public class ArmIOSim implements ArmIO {
